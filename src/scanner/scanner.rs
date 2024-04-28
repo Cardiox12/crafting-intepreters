@@ -256,13 +256,9 @@ impl Scanner {
         }
         let lexeme = self.source[self.start..self.current].to_string();
         let kind = IDENTIFIERS
-            .get(&lexeme);
+            .get(&lexeme)
+            .unwrap_or(&TokenKind::Identifier);
 
-        match kind {
-            Some(kind) => {
-                self.add_token(*kind);
-            }
-            None => self.add_token(TokenKind::Identifier)
-        }
+        self.add_token(*kind);
     }
 }
