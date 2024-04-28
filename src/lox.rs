@@ -1,5 +1,7 @@
 use std::{io::{self, BufRead, Write}, process::exit};
 
+use crate::scanner::scanner::Scanner;
+
 pub struct Lox {
     had_error: bool
 }
@@ -44,7 +46,14 @@ impl Lox {
     }
     
     fn run(&mut self, code: String) {
-        println!("{code}");
+        let mut scanner = Scanner::new(code);
+
+        let tokens = scanner.scan_tokens();
+
+        for token in tokens {
+            println!("{}", token.to_str());
+        }
+        // println!("{code}");
     }
 
     pub fn error(&mut self, line: usize, message: String) {

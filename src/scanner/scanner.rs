@@ -42,7 +42,7 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    fn new(source: String) -> Self {
+    pub fn new(source: String) -> Self {
         Self {
             source,
             tokens: vec![],
@@ -52,7 +52,7 @@ impl Scanner {
         }
     }
 
-    pub fn scan_tokens(&mut self) -> Vec<Token> {
+    pub fn scan_tokens(&mut self) -> &Vec<Token> {
         while !self.is_at_end() {
             self.start = self.current;
             self.scan_token();
@@ -61,7 +61,7 @@ impl Scanner {
             Token::new(TokenKind::Eof, String::new(), Box::new(""), self.line)
         );
         
-        vec![]
+        &self.tokens
     }
     
     fn scan_token(&mut self) {
@@ -155,7 +155,7 @@ impl Scanner {
     }
 
     fn is_at_end(&self) -> bool {
-        self.current < self.source.len()
+        self.current >= self.source.len()
     }
     
     fn advance(&mut self) -> char {
@@ -237,8 +237,13 @@ impl Scanner {
         }
         let lexeme = self.source[self.start..self.current].to_string();
         let kind = IDENTIFIERS
-            .get(&lexeme)
-            .unwrap_or(&TokenKind::Nil);
-        self.add_token(*kind);
+            .get(&lexeme);
+
+        match kind {
+            Some(kind) => {
+                self.add_token(*kind);
+            }
+            None => self.add_token(TokenKind::Identifier)
+        }
     }
 }
