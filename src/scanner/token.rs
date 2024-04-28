@@ -42,7 +42,7 @@ impl Token {
     }
 
     pub fn to_str(&self) -> String {
-        format!("{:?} {} {}", self.kind, self.lexeme, self.get_literal())
+        format!("{:?} {}", self.kind, self.lexeme)
     }
 
 
