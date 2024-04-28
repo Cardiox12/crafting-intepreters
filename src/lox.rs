@@ -53,7 +53,6 @@ impl Lox {
         for token in tokens {
             println!("{}", token.to_str());
         }
-        // println!("{code}");
     }
 
     pub fn error(&mut self, line: usize, message: String) {
