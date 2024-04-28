@@ -1,0 +1,12 @@
+class MielPops {
+    var name = "tony";
+    var age = 24;
+
+    fun getAge() {
+        return this.age;
+    }
+
+    fun getName() {
+        return this.name;
+    }
+}
