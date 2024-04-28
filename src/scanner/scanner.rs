@@ -3,6 +3,7 @@ use std::collections::HashMap;
 
 use lazy_static::lazy_static;
 
+use crate::lox::Lox;
 use crate::LOX;
 
 use super::token::Token;
@@ -115,6 +116,24 @@ impl Scanner {
                     while self.peek() != '\n' && !self.is_at_end() {
                         self.advance();
                     }
+                } else if self.match_char('*') {
+                    while self.peek() != '*' && !self.is_at_end() {
+                        if self.peek() == '\n' {
+                            self.line += 1;
+                        }
+                        self.advance();
+                    }
+                    if self.is_at_end() {
+                        return Lox::report_error(self.line, String::from("C-Style comment is not closed"));
+                    }
+                    self.advance();
+                    if self.is_at_end() || self.peek() != '/' {
+                        return Lox::report_error(self.line, String::from("C-Style comment is not closed"));
+                    }
+                    self.advance();
+                    let comment = self.source[self.start..self.current].to_string();
+
+                    println!("Comment: {}", comment);
                 }
             },
             // Ignore whitespaces
@@ -129,7 +148,7 @@ impl Scanner {
                 }
 
                 if self.is_at_end() {
-                    LOX.lock().unwrap().error(self.line, String::from("Unterminated string."));
+                    return Lox::report_error(self.line, String::from("Unterminated string."));
                 }
 
                 self.advance();

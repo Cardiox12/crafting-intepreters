@@ -1,6 +1,12 @@
-use std::{io::{self, BufRead, Write}, process::exit};
+use std::{io::{self, BufRead, Write}, process::exit, sync::Mutex};
+
+use lazy_static::lazy_static;
 
 use crate::scanner::scanner::Scanner;
+
+lazy_static! {
+    static ref LOX: Mutex<Lox> = Mutex::new(Lox::new());
+}
 
 pub struct Lox {
     had_error: bool
@@ -62,5 +68,9 @@ impl Lox {
     fn report(&mut self, line: usize, location: String, message: String) {
         println!("[line {line}] Error{location}: {message}");
         self.had_error = true;
+    }
+
+    pub fn report_error(line: usize, message: String) {
+        LOX.lock().unwrap().error(line, message);
     }
 }
