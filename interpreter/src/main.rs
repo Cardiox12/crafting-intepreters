@@ -1,6 +1,7 @@
 use std::{process::exit, sync::Mutex};
 
 pub mod scanner;
+
 pub mod lox;
 
 use lox::Lox;
