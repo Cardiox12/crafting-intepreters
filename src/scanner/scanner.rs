@@ -4,7 +4,6 @@ use std::collections::HashMap;
 use lazy_static::lazy_static;
 
 use crate::lox::Lox;
-use crate::LOX;
 
 use super::token::Token;
 use super::token::TokenKind;
@@ -164,10 +163,7 @@ impl Scanner {
                     self.identifier();
                 }
                 else {
-                    LOX
-                        .lock()
-                        .unwrap()
-                        .error(self.line, "Unexpected character.".to_string())
+                    Lox::report_error(self.line, String::from("Unexpected character"));
                 }
             }
         }

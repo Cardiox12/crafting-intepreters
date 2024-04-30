@@ -1,14 +1,9 @@
 use std::{process::exit, sync::Mutex};
 
 pub mod scanner;
-mod lox;
+pub mod lox;
 
-use lazy_static::lazy_static;
 use lox::Lox;
-
-lazy_static! {
-    static ref LOX: Mutex<Lox> = Mutex::new(Lox::new());
-}
 
 fn main() {
     let args = std::env::args();
